@@ -12,7 +12,8 @@ app = Flask(__name__)
 os.environ['AWS_ACCESS_KEY_ID'] = 'dummy'
 os.environ['AWS_SECRET_ACCESS_KEY'] = 'dummy'
 os.environ['LOCALSTACK_DOCKER_NAME'] = 'localstack_main'
-os.environ['LOCALSTACK_PORT'] = 4566
+os.environ['LOCALSTACK_PORT'] = '4566'
+os.environ['LOCALSTACK_HOST'] = 'localhost'
 
 # Initialize AWS clients with LocalStack
 dynamodb = boto3.resource('dynamodb', endpoint_url='http://localstack:4510', region_name='us-east-1')
