@@ -44,6 +44,17 @@ jobs:
       run: |
         docker compose -f docker-compose.yml up -d
         
+    - name: Wait for LocalStack to be ready
+      run: |
+        while ! curl --silent --fail http://localhost:4566/_localstack/health; do
+          echo "Waiting for LocalStack to be ready..."
+          sleep 5
+        done
+
+    - name: Test LocalStack Connectivity
+      run: |
+        curl http://localhost:4566/_localstack/health
+        
     - name: Build Docker image for API
       run: docker build -f src/Dockerfile.api -t my-api .
 
