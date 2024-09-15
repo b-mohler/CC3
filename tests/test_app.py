@@ -1,4 +1,5 @@
 import pytest
+import boto3
 import json
 from src.app import app, create_resources, dynamodb, s3, TABLE_NAME, BUCKET_NAME
 
@@ -7,14 +8,17 @@ from src.app import app, create_resources, dynamodb, s3, TABLE_NAME, BUCKET_NAME
 def client():
     create_resources()
     app.config['TESTING'] = True
-    return boto3.client(
+    with app.test_client() as client:
+        yield client
+
+def get_s3_object(bucket, key):
+    s3 = boto3.client(
         's3',
         endpoint_url='http://localhost:4566',
         region_name='us-east-1',
         aws_access_key_id='dummy',
         aws_secret_access_key='dummy'
-
-def get_s3_object(bucket, key):
+    )
     try:
         response = s3.get_object(Bucket=bucket, Key=key)
         return response['Body'].read().decode('utf-8')
