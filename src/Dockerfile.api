@@ -1,0 +1,25 @@
+# src/Dockerfile2.api
+
+FROM python:3.9-slim
+
+# Set the working directory inside the Docker image
+WORKDIR /app
+
+# Copy requirements.txt from the build context (root) into /app in the Docker image
+COPY requirements.txt /app/requirements.txt
+
+# Install dependencies
+RUN pip install -r /app/requirements.txt
+
+# Copy app2.py from the src directory in the build context into /app in the Docker image
+COPY src/app2.py /app/app.py
+
+# Expose port 5000 for the application
+EXPOSE 5000
+
+# Set environment variables for LocalStack
+ENV AWS_ACCESS_KEY_ID=dummy
+ENV AWS_SECRET_ACCESS_KEY=dummy
+
+# Define the command to run the application
+CMD ["python", "app.py"]
