@@ -1,11 +1,17 @@
 version: '3.8'
 
 services:
-    localstack:
-      image: localstack/localstack
-      ports:
-        - 4566:4566
-      options: --health-cmd="curl --silent --fail http://localhost:4566/_localstack/health || exit 1" --health-interval=10s --health-timeout=5s --health-retries=3
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    healthcheck:
+      test: curl --silent --fail http://localhost:4566/_localstack/health || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   api:
     build:
