@@ -7,8 +7,12 @@ from src.app import app, create_resources, dynamodb, s3, TABLE_NAME, BUCKET_NAME
 def client():
     create_resources()
     app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+    return boto3.client(
+        's3',
+        endpoint_url='http://localhost:4566',
+        region_name='us-east-1',
+        aws_access_key_id='dummy',
+        aws_secret_access_key='dummy'
 
 def get_s3_object(bucket, key):
     try:
